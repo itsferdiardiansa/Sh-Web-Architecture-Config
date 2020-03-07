@@ -10,6 +10,6 @@ ARG CLIENT_PORT
 # RUN apt-get install -y \
 #     vim
 
-COPY ./docker-config/client-web-server/hosts conf.d/
+COPY .docker/client-web-server/hosts conf.d/
 
 CMD ["nginx", "-g", "daemon off;"]
