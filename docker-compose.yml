@@ -1,0 +1,35 @@
+version: '3.7'
+services:
+  # Client app
+  web:
+    container_name: web
+    image: ferdiardiansa/social-media:latest
+    ports:
+      - 3000:80
+    networks: 
+      - sh-client
+
+  # Client web server
+  client-web-server:
+    container_name: sh-client-web-server
+    build:
+      context: .
+      dockerfile: '.docker/client-web-server/Dockerfile'
+      cache_from:
+        - nginx:latest
+      args:
+        - CLIENT_PORT=${CLIENT_PORT}
+    ports:
+      - ${CLIENT_PORT}:80
+    volumes:
+      - ./logs/client-web-server/:/var/log/nginx
+    restart: always
+    depends_on:
+      - web
+    env_file:
+      - .env
+    networks:
+      - sh-client
+
+networks:
+  sh-client:
