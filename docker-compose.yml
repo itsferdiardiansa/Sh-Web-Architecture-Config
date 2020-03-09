@@ -5,9 +5,18 @@ services:
     container_name: web
     image: ferdiardiansa/social-media:latest
     ports:
-      - 3000:80
+      - 3007:80
     networks: 
       - sh-client
+    volumes:
+      - client-app-data:/usr/share/nginx/html
+    deploy:
+      replicas: 5
+      update_config:
+        parallelism: 2
+        delay: 10s
+      restart_policy:
+        condition: on-failure
 
   # Client web server
   client-web-server:
@@ -30,6 +39,13 @@ services:
       - .env
     networks:
       - sh-client
+    volumes:
+      - client-app-data:/usr/app
+    deploy:
+      replicas: 2
 
 networks:
   sh-client:
+
+volumes:
+  client-app-data:
